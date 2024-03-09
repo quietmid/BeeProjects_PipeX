@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/08 16:36:05 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/09 19:39:47 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,34 @@ apply the cmd to file1 and file2
 output the final
 */
 
-int	main(int ac, char **ag, char **envp)
-{
-	if (ac != 5)
+//int	main(int ac, char **ag, char **envp)
+//{
+//	if (ac != 5)
 		
 	
-	return (0);
+//	return (0);
+//}
+
+#include <stdio.h>
+int	main(int ac, char **av)
+{
+	int id = fork();
+	int n;
+	if (id == 0)
+		n = 1;
+	else
+		n = 6;
+	if (id != 0)
+		wait();
+	int i;
+	for (i = n; i < n + 5; i++)
+		printf("%d ", i);
+		fflush(stdout);
 }
+
+/*
+if (pid < 0)
+	fork failed
+	printf Fork failed
+	return 1 
+*/
