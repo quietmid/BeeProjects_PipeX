@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/09 19:39:47 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/12 16:50:36 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,20 @@ apply the cmd to file1 and file2
 output the final
 */
 
-//int	main(int ac, char **ag, char **envp)
-//{
-//	if (ac != 5)
-		
+int	main(int ac, char **ag, char **envp)
+{
+	int fd[2];
 	
-//	return (0);
-//}
+	if (ac == 5)
+	{
+		if (pipe(fd) == -1)
+			error_msg_params()
+	}
+	else
+		error_msg_params(WRONG_ARGCOUNT, "Cmon man, I need FOUR arguments!"); // is this okay?
+	return (EXIT_SUCCESS);
+}
 
-#include <stdio.h>
 int	main(int ac, char **av)
 {
 	int id = fork();
