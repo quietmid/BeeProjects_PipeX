@@ -6,16 +6,17 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/03/08 15:38:58 by jlu              ###   ########.fr        #
+#    Updated: 2024/03/13 20:45:08 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PROJECT = pipex
-NAME = pipe_x
+NAME = pipex
 
 LIBFT = ./libft/libft.a	
 
-SRC = ./SRC/ \
+SRC = ./SRC/pipe_x.c \
+	  ./SRC/pipex_utils.c \
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror

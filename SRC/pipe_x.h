@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/12 16:11:05 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/13 20:47:28 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,17 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-
-//error types
-typedef enum s_error
-{
-		WRONG_ARGCOUNT,
-		CMD_MISSING, // commond not found
-		PIPE_FAIL,
-		NO_PATH,
-		FAIL_EXCU,
-} t_error;
+# include <string.h>
 
 // Error Handling
-void	error_msg_params(t_error error, char *msg);
+void	error_msg(char *msg);
+
+// Utils
+
+void	find_cmd(char *ag, char **envp);
+
+//Processes
+void	child_process(char **ag, char **envp, int *fd);
+void	parent_process(char **ag, char **envp, int *fd);
 
 #endif
