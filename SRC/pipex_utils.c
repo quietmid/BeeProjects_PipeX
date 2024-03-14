@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/13 21:15:43 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/14 17:59:17 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,27 @@ void	error_msg(char *msg)
 	exit (EXIT_FAILURE);
 }
 
-void	find_cmd(char *ag, char **envp)
+void	exe_cmd(char *ag, char **envp)
 {
-	char	**cmd;
+	char	**cmd_a;
 	char	*path;
+	char	*cmd;
 
 	if (!ag)
 		perror("Error");
-	cmd = ft_split(ag, ' ');
-	if (!cmd)
+	cmd_a = ft_split(ag, ' ');
+	if (!cmd_a)
 		error_msg("Split Fail");
+	path = find_path(envp);
+	cmd = get_cmd();
 		
 }
+
+char	*find_path(char **envp)
+{
+	while (ft_strncmp("PATH", *envp, 4))
+		envp++;
+	return(*envp + 5);
+}
+
+

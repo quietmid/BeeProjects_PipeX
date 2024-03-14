@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/13 21:23:08 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/14 18:05:37 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ apply the cmd to file1 and file2
 output the final
 */
 
-void	child_process(char **ag, char **envp, int *fd)
+void	child_process(char **ag, char **envp, t_pipex pipex)
 {
 	int filein;
 
@@ -28,12 +28,12 @@ void	child_process(char **ag, char **envp, int *fd)
 		error_msg("Read Failed pid = 0");
 	dup2(fd[1], 0);
 	dup2(filein, 1);
-	close(fd[1]);
+	close(fd[0]);
 	close(filein);
-	find_cmd(ag[2], envp);
+	exe_cmd(ag[2], envp);
 }
 
-void	parent_process(char **ag, char **envp, int *fd)
+void	parent_process(char **ag, char **envp, t_pipex pipex)
 {
 	int	fileout;
 
@@ -42,33 +42,32 @@ void	parent_process(char **ag, char **envp, int *fd)
 		error_msg("Open Fail");
 	dup2(fd[0], 0);
 	dup2(fileout, 1);
-	close(fd[0]);
+	close(fd[1]);
 	close(fileout);
-	find_cmd(ag[3], envp);
+	exe_cmd(ag[3], envp);
 }
 
 int	main(int ac, char **ag, char **envp)
 {
-	int 	fd[2];
-	pid_t	pid1;
+	t_pipex pipex;
 	
 	if (ac == 5)
 	{
-		if (pipe(fd) == -1)
+		if (pipe(pipex.fd) == -1)
 			error_msg("Pipe Fail");
-		pid1 = fork();
-		if (pid1 == -1)
+		pipex.pid1 = fork();
+		if (pipex.pid1 == -1)
 			error_msg("Fork Fail");
-		if (pid1 == 0) //child process
-			child_process(ag, envp, fd);
+		if (pipex.pid1 == 0) //child process
+			child_process(ag, envp, pipex);
 			// child process func
 		// if the pid1 is a parent process, then it waits then we process the parent
 		;
 	}
 	else
 		error_msg("Cmon man, I need FOUR arguments!");
-	ag = NULL;
-	envp = NULL;
+	// ag = NULL;
+	// envp = NULL;
 	return (EXIT_SUCCESS);
 }
 
