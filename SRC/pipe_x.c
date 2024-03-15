@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/14 18:05:37 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/15 09:59:49 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,25 @@ output the final
 
 void	child_process(char **ag, char **envp, t_pipex pipex)
 {
-	int filein;
-
-	filein = open(ag[1], O_RDONLY, 0777);
-	if (filein == -1)
+	pipex.filein = open(ag[1], O_RDONLY, 0777);
+	if (pipex.filein == -1)
 		error_msg("Read Failed pid = 0");
-	dup2(fd[1], 0);
-	dup2(filein, 1);
-	close(fd[0]);
-	close(filein);
+	dup2(pipex.fd[1], 0);
+	dup2(pipex.filein, 1);
+	close(pipex.fd[0]);
+	close(pipex.filein);
 	exe_cmd(ag[2], envp);
 }
 
 void	parent_process(char **ag, char **envp, t_pipex pipex)
 {
-	int	fileout;
-
-	fileout = open(ag[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fileout == -1)
+	pipex.fileout = open(ag[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex.fileout == -1)
 		error_msg("Open Fail");
-	dup2(fd[0], 0);
-	dup2(fileout, 1);
-	close(fd[1]);
-	close(fileout);
+	dup2(pipex.fd[0], 0);
+	dup2(pipex.fileout, 1);
+	close(pipex.fd[1]);
+	close(pipex.fileout);
 	exe_cmd(ag[3], envp);
 }
 
