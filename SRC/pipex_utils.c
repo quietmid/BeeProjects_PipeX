@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/14 17:59:17 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/15 16:19:29 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,32 @@ void	error_msg(char *msg)
 	exit (EXIT_FAILURE);
 }
 
-void	exe_cmd(char *ag, char **envp)
+char	*exe_cmd(char *ag, char **path)
 {
-	char	**cmd_a;
-	char	*path;
-	char	*cmd;
+	char	*tmp;
+	char	*command;
 
 	if (!ag)
 		perror("Error");
-	cmd_a = ft_split(ag, ' ');
-	if (!cmd_a)
-		error_msg("Split Fail");
-	path = find_path(envp);
-	cmd = get_cmd();
-		
+	while (*path)
+	{
+		tmp = ft_strjoin(*path, "/");
+		command = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(command, 0) == 0)
+			return (command);
+		free(command);
+		path++;
+	}
+	return (NULL);
 }
 
+// go through the envp and search for PATH then get that string after the PATH 
 char	*find_path(char **envp)
 {
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
-	return(*envp + 5);
+	return(*envp + 5); // the 5 to get pass the PATH
 }
 
 
