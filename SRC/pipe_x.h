@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/15 10:01:16 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/19 16:33:59 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/wait.h>
 
 typedef struct s_pipex
 {
 	pid_t 	pid1;
+	pid_t	pid2;
 	int		fd[2];
 	int		filein;
 	int		fileout;
@@ -37,12 +39,11 @@ void	error_msg(char *msg);
 
 // Utils
 
-void	find_cmd(char *ag, char **envp);
 char	*find_path(char **envp);
-void	exe_cmd(char *ag, char **envp);
+//void	exe_cmd(char *ag, char **envp);
 
 //Processes
-void	child_process(char **ag, char **envp, t_pipex pipex);
+void	child_process1(char **ag, char **envp, t_pipex pipex);
 void	parent_process(char **ag, char **envp, t_pipex pipex);
 
 #endif

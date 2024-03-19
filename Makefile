@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/03/13 20:45:08 by jlu              ###   ########.fr        #
+#    Updated: 2024/03/19 13:09:49 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ LIBFT = ./libft/libft.a
 
 SRC = ./SRC/pipe_x.c \
 	  ./SRC/pipex_utils.c \
+
+BSRC = 
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -34,6 +36,7 @@ RESET     := \x1b[0m #reseting the text formatting to default state
 
 OBJECTS_DIR = obj
 OBJECTS = $(addprefix $(OBJECTS_DIR)/,$(notdir $(SRC:.c=.o)))
+BOBJECTS = $(addprefix $(OBJECTS_DIR)/,$(notdir $(BSRC:.c=.o)))
 
 all: $(NAME)
 
@@ -51,6 +54,15 @@ $(OBJECTS_DIR)/%.o: ./SRC/%.c
 		@mkdir -p $(OBJECTS_DIR)
 		@echo "Compiled $(GREEN) $^ $(RESET)"
 		@$(CC) $(CFLAGS) -c -o $@ $^
+
+bonus: .bonus
+
+.bonus: $(OBJECTS) $(BOBJECTS)
+		@echo "Compiled with $(BLUE)$(CFLAGS)$(RESET)"
+		@$(CC) $(CFLAGS) -o $(NAME) $(OBJECTS) $(BOBJECTS) $(LIBFT)
+		@echo "$(CYAN)--------------------------------"
+		@echo "$(NAME) = woooo you have activated my bonus!"
+		@echo "$(CYAN)--------------------------------$(RESET)"	
 
 clean:
 		@$(MAKE) clean -C ./libft

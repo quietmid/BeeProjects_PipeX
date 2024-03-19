@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/15 16:19:29 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/19 16:33:05 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,6 @@ void	error_msg(char *msg)
 	ft_putendl_fd(msg, 2);
 	//perror(msg);
 	exit (EXIT_FAILURE);
-}
-
-char	*exe_cmd(char *ag, char **path)
-{
-	char	*tmp;
-	char	*command;
-
-	if (!ag)
-		perror("Error");
-	while (*path)
-	{
-		tmp = ft_strjoin(*path, "/");
-		command = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		path++;
-	}
-	return (NULL);
 }
 
 // go through the envp and search for PATH then get that string after the PATH 
