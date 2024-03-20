@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/19 17:13:28 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/20 14:09:54 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,15 @@ static char	*exe_cmd(char *ag, char **path)
 void	child_process1(char **ag, char **envp, t_pipex pipex)
 {
 	printf("child process1\n");
+	printf("ag 2: %s\n", ag[2]);
 	dup2(pipex.fd[1], 1);
 	close(pipex.fd[0]);
 	dup2(pipex.filein, 0);
 	pipex.cmd_a = ft_split(ag[2], ' ');
+	if (pipex.cmd_a[0] == NULL)
+		printf("split fail");
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
+	printf("cmd: %s\n", pipex.cmd);
 	if (!pipex.cmd)
 	{
 		//free child memory
@@ -76,9 +80,9 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 int	main(int ac, char **ag, char **envp)
 {
 	t_pipex pipex;
-	int i;
+	// int i; //test
 	
-	i  = 0;
+	// i  = 0; //test
 	if (ac != 5)
 		error_msg("Cmon man, I need FOUR arguments!");
 	pipex.filein = open(ag[1], O_RDONLY);
@@ -90,13 +94,13 @@ int	main(int ac, char **ag, char **envp)
 	if (pipe(pipex.fd) < 0)
 		error_msg("Pipe Fail");
 	pipex.path = find_path(envp);
-	printf("path: %s\n", pipex.path);
+	// printf("path: %s\n", pipex.path);
 	pipex.path_cmds = ft_split(pipex.path, ':');
-	while (pipex.path_cmds[i] != NULL)
-	{
-		printf("cmd %d: %s\n", i, pipex.path_cmds[i]);
-		i++;
-	}
+	// while (pipex.path_cmds[i] != NULL)
+	// {
+	// 	printf("cmd %d: %s\n", i, pipex.path_cmds[i]);
+	// 	i++;
+	// }
 	pipex.pid1 = fork();
 	if (pipex.pid1 < 0)
 		error_msg("Fork Fail");
