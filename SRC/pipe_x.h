@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/19 16:33:59 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/20 18:15:57 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+
+# define ERR_FILE "no such file or directory: "
+# define ERR_INPUT "Cmon man, do you know how to count up to four?"
+# define ERR_CMD "command not found: "
+# define ERR_PIPE "pipe error"
+# define ERR_FORK "fork error"
+# define ERR_SPT "split error"
 
 typedef struct s_pipex
 {
@@ -35,7 +42,7 @@ typedef struct s_pipex
 }		t_pipex;
 
 // Error Handling
-void	error_msg(char *msg);
+void	error_msg(char *msg, char *ag);
 
 // Utils
 
@@ -44,6 +51,6 @@ char	*find_path(char **envp);
 
 //Processes
 void	child_process1(char **ag, char **envp, t_pipex pipex);
-void	parent_process(char **ag, char **envp, t_pipex pipex);
+void	child_process2(char **ag, char **envp, t_pipex pipex);
 
 #endif

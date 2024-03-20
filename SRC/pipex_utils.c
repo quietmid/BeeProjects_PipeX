@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/19 16:33:05 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/20 18:13:22 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 // when the file can't be found
 // zsh: no such file or directiory: `input`
 // 0: stdinput 1: stdoutput 2:stderror 
-void	error_msg(char *msg)
+
+void	error_msg(char *err, char *ag)
 {
 	ft_putstr_fd("pipex: ", 2);
-	ft_putendl_fd(msg, 2);
-	//perror(msg);
+	write(2, err, ft_strlen(err));
+	if (ag != NULL)
+		ft_putendl_fd(ag, 2);
 	exit (EXIT_FAILURE);
 }
 

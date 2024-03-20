@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/20 14:09:54 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/20 18:16:44 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static char	*exe_cmd(char *ag, char **path)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, "/");
-		command = ft_strjoin(tmp, command);
+		command = ft_strjoin(tmp, ag);
 		free(tmp);
 		if (access(command, 0) == 0)
 			return (command);
@@ -43,38 +43,40 @@ static char	*exe_cmd(char *ag, char **path)
 
 void	child_process1(char **ag, char **envp, t_pipex pipex)
 {
-	printf("child process1\n");
-	printf("ag 2: %s\n", ag[2]);
 	dup2(pipex.fd[1], 1);
 	close(pipex.fd[0]);
 	dup2(pipex.filein, 0);
 	pipex.cmd_a = ft_split(ag[2], ' ');
 	if (pipex.cmd_a[0] == NULL)
-		printf("split fail");
+		error_msg(ERR_SPT, NULL);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
-	printf("cmd: %s\n", pipex.cmd);
 	if (!pipex.cmd)
 	{
 		//free child memory
-		error_msg("Command not found");
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	}
 	execve(pipex.cmd, pipex.cmd_a, envp);
+	//if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
+	//	printf("execve failed");
 }
 
 void	child_process2(char **ag, char **envp, t_pipex pipex)
 {
-	printf("child process2\n");
 	dup2(pipex.fd[0], 0);
 	close(pipex.fd[1]);
 	dup2(pipex.fileout, 1);
 	pipex.cmd_a = ft_split(ag[3], ' ');
+	if (pipex.cmd_a[0] == NULL)
+		error_msg(ERR_SPT, NULL);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 	{
 		//free child memory
-		error_msg("cmd not found");
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	}
 	execve(pipex.cmd, pipex.cmd_a, envp);
+	//if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
+	//	printf("execve failed");
 }
 
 int	main(int ac, char **ag, char **envp)
@@ -84,15 +86,15 @@ int	main(int ac, char **ag, char **envp)
 	
 	// i  = 0; //test
 	if (ac != 5)
-		error_msg("Cmon man, I need FOUR arguments!");
+		error_msg(ERR_INPUT, NULL);
 	pipex.filein = open(ag[1], O_RDONLY);
 	if (pipex.filein < 0)
-		error_msg("Read Failed pid = 0");
+		error_msg(ERR_FILE, ag[1]);
 	pipex.fileout = open(ag[4], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (pipex.fileout < 0)
-		error_msg("Open Fail");
+		error_msg(ERR_FILE, ag[4]);
 	if (pipe(pipex.fd) < 0)
-		error_msg("Pipe Fail");
+		error_msg(ERR_PIPE, NULL);
 	pipex.path = find_path(envp);
 	// printf("path: %s\n", pipex.path);
 	pipex.path_cmds = ft_split(pipex.path, ':');
@@ -103,12 +105,12 @@ int	main(int ac, char **ag, char **envp)
 	// }
 	pipex.pid1 = fork();
 	if (pipex.pid1 < 0)
-		error_msg("Fork Fail");
+		error_msg(ERR_FORK, NULL);
 	if (pipex.pid1 == 0) //child process
 		child_process1(ag, envp, pipex);
 	pipex.pid2 = fork();
 	if (pipex.pid2 < 0)
-		error_msg("Fork Fail");
+		error_msg(ERR_FORK, NULL);
 	if (pipex.pid2 == 0)
 		child_process2(ag, envp, pipex);
 	// if the pid1 is a parent process, then it waits then weprocess the parent
