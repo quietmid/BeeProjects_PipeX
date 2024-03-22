@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/22 18:05:29 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/22 18:24:13 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,7 @@ int	main(int ac, char **ag, char **envp)
 	free_parent(&pipex);
 	return (EXIT_SUCCESS);
 }
+
+/*
+	22.3 updates: used tester failed a lot of cases on STDERR, apparently im not exiting correctly or printing out the correct exit code. I also need to check for ag[1] permission, if it doesn't allow us, I need to return errors too, permission denied.
+*/
