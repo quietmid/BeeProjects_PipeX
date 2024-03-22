@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/20 18:16:44 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/22 12:05:19 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*exe_cmd(char *ag, char **path)
 	{
 		tmp = ft_strjoin(*path, "/");
 		command = ft_strjoin(tmp, ag);
-		free(tmp);
+		// free(tmp);
 		if (access(command, 0) == 0)
 			return (command);
 		free(command);
