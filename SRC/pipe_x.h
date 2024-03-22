@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/20 18:15:57 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/22 17:36:38 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define ERR_FILE "no such file or directory: "
 # define ERR_INPUT "Cmon man, do you know how to count up to four?"
@@ -27,6 +28,7 @@
 # define ERR_PIPE "pipe error"
 # define ERR_FORK "fork error"
 # define ERR_SPT "split error"
+# define ERROR "permission denied: "
 
 typedef struct s_pipex
 {
@@ -47,7 +49,9 @@ void	error_msg(char *msg, char *ag);
 // Utils
 
 char	*find_path(char **envp);
-//void	exe_cmd(char *ag, char **envp);
+void	pipe_closer(t_pipex *pipex);
+void	free_parent(t_pipex *pipex);
+void	free_child(t_pipex *pipex);
 
 //Processes
 void	child_process1(char **ag, char **envp, t_pipex pipex);
