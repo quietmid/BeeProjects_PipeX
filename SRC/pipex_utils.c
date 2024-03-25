@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/22 18:06:26 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/25 17:29:49 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,28 @@
 // zsh: no such file or directiory: `input`
 // 0: stdinput 1: stdoutput 2:stderror 
 
-void	error_msg(char *err, char *ag)
+void	error_msg(char *err, char *ag, t_pipex *pipex)
 {
 	ft_putstr_fd("pipex: ", 2);
-	write(2, err, ft_strlen(err));
+	if (err == ERR_INPUT)
+	{
+		ft_putendl_fd(err, 2);
+		exit (EXIT_FAILURE);
+	}
 	if (err == ERR_CMD)
 	{
-		ft_putendl_fd(ag, 2);
+		ft_putstr_fd(ag, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(err, 2);
+		free_child(pipex);
 		exit (errno);
 	}
-	if (err == ERR_FILE)
+	if (ag != NULL)
 	{
-		ft_putendl_fd(ag, 2);
-		exit (errno);
+		ft_putstr_fd(ag, 2);
+		ft_putstr_fd(": ", 2);
 	}
-	if (err == ERR_FILE)
-	{
-		if (ag == NULL)
-			ag = "\n";
-		ft_putendl_fd(ag, 2);
-		exit (errno);
-	}
+	perror("");
 	exit (EXIT_FAILURE);
 }
 
@@ -45,7 +46,7 @@ char	*find_path(char **envp)
 {
 	while (ft_strncmp("PATH", *envp, 4))
 		envp++;
-	return(*envp + 5); // the 5 to get pass the PATH
+	return (*envp + 5);
 }
 
 void	free_child(t_pipex *pipex)
