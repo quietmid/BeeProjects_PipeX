@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/25 17:29:23 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 15:28:03 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,17 @@
 
 void	waiting(t_pipex *pipex)
 {
-	waitpid(pipex->pid1, NULL, 0);
-	waitpid(pipex->pid2, NULL, 0);
+	int	status;
+
+	//status = 0;
+	waitpid(pipex->pid1, &status, 0);
+	if (WIFEXITED(status))
+		pipex->status = WEXITSTATUS(status);
+	//printf("Child process1 exited with status: %d\n", WEXITSTATUS(status));
+	waitpid(pipex->pid2, &status, 0);
+	if (WIFEXITED(status))
+		pipex->status = WEXITSTATUS(status);
+	//printf("Child process2 exited with status: %d\n", WEXITSTATUS(status));
 }
 
 //join the command with the path and use access to find the command
@@ -47,11 +56,11 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 	dup2(pipex.filein, 0);
 	pipex.cmd_a = ft_split(ag[2], ' ');
 	if (pipex.cmd_a[0] == NULL)
-		error_msg(ERR_CMD, NULL, NULL);
+		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 	{
-		free_child(&pipex);
+		//free_child(&pipex);
 		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
 	}
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
@@ -71,7 +80,7 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 	dup2(pipex.fileout, 1);
 	pipex.cmd_a = ft_split(ag[3], ' ');
 	if (pipex.cmd_a[0] == NULL)
-		error_msg(ERR_CMD, NULL, NULL);
+		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 		error_msg(ERR_CMD, pipex.cmd_a[0], &pipex);
@@ -88,6 +97,7 @@ int	main(int ac, char **ag, char **envp)
 
 	if (ac != 5)
 		error_msg(ERR_INPUT, NULL, NULL);
+	pipex.status = 0;
 	if (pipe(pipex.fd) < 0)
 		error_msg(ERR, NULL, NULL);
 	pipex.path = find_path(envp);
@@ -105,9 +115,12 @@ int	main(int ac, char **ag, char **envp)
 	pipe_closer(&pipex);
 	waiting(&pipex);
 	free_parent(&pipex);
+	system("leaks pipex"); // need to be removed
 	return (EXIT_SUCCESS);
 }
 
 /*
+	26.4 updates: need to return the wexitstatus in waitpid to make sure that I return the right exit code. I am piping correctly and currently no memory leaks. 
+
 	22.3 updates: used tester failed a lot of cases on STDERR, im not exiting correctly or printing out the correct exit code. I also need to check for ag[1] permission, if it doesn't allow us, I need to return errors too, permission denied.
 */

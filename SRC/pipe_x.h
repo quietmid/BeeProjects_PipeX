@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/25 17:28:20 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 15:26:58 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+//# include <sys/types.h>
 # include <errno.h>
 
 # define ERR_INPUT "Cmon man, do you know how to count up to four?"
-# define ERR_CMD "Command not found"
+# define ERR_CMD "command not found"
 # define ERR ""
 
 typedef struct s_pipex
@@ -33,6 +34,7 @@ typedef struct s_pipex
 	int		fd[2];
 	int		filein;
 	int		fileout;
+	int		status;
 	char	*path;
 	char	*cmd;
 	char	**path_cmds;

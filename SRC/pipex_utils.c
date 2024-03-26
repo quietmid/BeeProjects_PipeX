@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/25 17:29:49 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 15:23:32 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	error_msg(char *err, char *ag, t_pipex *pipex)
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(err, 2);
 		free_child(pipex);
-		exit (errno);
+		exit (127);
 	}
 	if (ag != NULL)
 	{
