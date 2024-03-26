@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/03/22 15:46:52 by jlu              ###   ########.fr        #
+#    Updated: 2024/03/26 20:07:13 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRC = ./SRC/pipe_x.c \
 #BSRC = 
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g #remove -g
 
 #Color ANSI Code
 BOLD   := \033[1m./SRC/

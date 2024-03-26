@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 15:23:32 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 21:23:01 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // zsh: no such file or directiory: `input`
 // 0: stdinput 1: stdoutput 2:stderror 
 
-void	error_msg(char *err, char *ag, t_pipex *pipex)
+void	error_msg(char *err, char *ag)
 {
 	ft_putstr_fd("pipex: ", 2);
 	if (err == ERR_INPUT)
@@ -29,7 +29,6 @@ void	error_msg(char *err, char *ag, t_pipex *pipex)
 		ft_putstr_fd(ag, 2);
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(err, 2);
-		free_child(pipex);
 		exit (127);
 	}
 	if (ag != NULL)
@@ -49,28 +48,15 @@ char	*find_path(char **envp)
 	return (*envp + 5);
 }
 
-void	free_child(t_pipex *pipex)
+
+void	free_arr(char **array)
 {
 	int	i;
 
 	i = 0;
-	while (pipex->cmd_a[i] != NULL)
-		free(pipex->cmd_a[i++]);
-	if (pipex->cmd_a)
-		free(pipex->cmd_a);
-	free(pipex->cmd);
-}
-
-void	free_parent(t_pipex *pipex)
-{
-	int	i;
-
-	close(pipex->filein);
-	close(pipex->fileout);
-	i = 0;
-	while (pipex->path_cmds[i] != NULL)
-		free(pipex->path_cmds[i++]);
-	free(pipex->path_cmds);
+	while (array[i] != NULL)
+		free(array[i++]);
+	free(array);
 }
 
 void	pipe_closer(t_pipex *pipex)

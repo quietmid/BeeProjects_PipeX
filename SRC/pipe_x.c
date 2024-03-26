@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 15:28:03 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 21:33:37 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@ void	waiting(t_pipex *pipex)
 {
 	int	status;
 
-	//status = 0;
-	waitpid(pipex->pid1, &status, 0);
-	if (WIFEXITED(status))
-		pipex->status = WEXITSTATUS(status);
-	//printf("Child process1 exited with status: %d\n", WEXITSTATUS(status));
+	status = 0;
+	waitpid(pipex->pid1, NULL, 0);
 	waitpid(pipex->pid2, &status, 0);
 	if (WIFEXITED(status))
 		pipex->status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+        pipex->status = WTERMSIG(status);
 	//printf("Child process2 exited with status: %d\n", WEXITSTATUS(status));
 }
 
@@ -50,23 +49,21 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 {
 	pipex.filein = open(ag[1], O_RDONLY);
 	if (pipex.filein < 0)
-		error_msg(ERR, ag[1], NULL);
+		error_msg(ERR, ag[1]);
 	dup2(pipex.fd[1], 1);
 	close(pipex.fd[0]);
 	dup2(pipex.filein, 0);
+	close(pipex.filein);
 	pipex.cmd_a = ft_split(ag[2], ' ');
 	if (pipex.cmd_a[0] == NULL)
-		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
-	{
-		//free_child(&pipex);
-		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
-	}
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
 	{
-		free_child(&pipex);
-		error_msg(ERR, NULL, NULL);
+		free_arr(pipex.cmd_a);
+		error_msg(ERR, NULL);
 	}
 }
 
@@ -74,20 +71,21 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 {
 	pipex.fileout = open(ag[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.fileout < 0)
-		error_msg(ERR, ag[4], NULL);
+		error_msg(ERR, ag[4]);
 	dup2(pipex.fd[0], 0);
 	close(pipex.fd[1]);
 	dup2(pipex.fileout, 1);
+	close(pipex.fileout);
 	pipex.cmd_a = ft_split(ag[3], ' ');
 	if (pipex.cmd_a[0] == NULL)
-		error_msg(ERR_CMD, pipex.cmd_a[0], NULL);
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
-		error_msg(ERR_CMD, pipex.cmd_a[0], &pipex);
+		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
 	{
-		free_child(&pipex);
-		error_msg(ERR, NULL, NULL);
+		free_arr(pipex.cmd_a);
+		error_msg(ERR, NULL);
 	}
 }
 
@@ -96,31 +94,32 @@ int	main(int ac, char **ag, char **envp)
 	t_pipex	pipex;
 
 	if (ac != 5)
-		error_msg(ERR_INPUT, NULL, NULL);
+		error_msg(ERR_INPUT, NULL);
 	pipex.status = 0;
 	if (pipe(pipex.fd) < 0)
-		error_msg(ERR, NULL, NULL);
+		error_msg(ERR, NULL);
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	pipex.pid1 = fork();
 	if (pipex.pid1 < 0)
-		error_msg(ERR, NULL, NULL);
+		error_msg(ERR, NULL);
 	if (pipex.pid1 == 0)
 		child_process1(ag, envp, pipex);
 	pipex.pid2 = fork();
 	if (pipex.pid2 < 0)
-		error_msg(ERR, NULL, NULL);
+		error_msg(ERR, NULL);
 	if (pipex.pid2 == 0)
 		child_process2(ag, envp, pipex);
 	pipe_closer(&pipex);
 	waiting(&pipex);
-	free_parent(&pipex);
-	system("leaks pipex"); // need to be removed
-	return (EXIT_SUCCESS);
+	free_arr(pipex.path_cmds);
+	return (pipex.status);
 }
 
 /*
-	26.4 updates: need to return the wexitstatus in waitpid to make sure that I return the right exit code. I am piping correctly and currently no memory leaks. 
+	26.3 updates 2: fix the error code, its now giving the correct error code. The tester is still not passing. Especially if the commands itself has "" marks.
+	
+	26.3 updates: need to return the wexitstatus in waitpid to make sure that I return the right exit code. I am piping correctly and currently no memory leaks. 
 
 	22.3 updates: used tester failed a lot of cases on STDERR, im not exiting correctly or printing out the correct exit code. I also need to check for ag[1] permission, if it doesn't allow us, I need to return errors too, permission denied.
 */

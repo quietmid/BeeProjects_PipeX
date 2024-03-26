@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 15:26:58 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/26 21:10:54 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ typedef struct s_pipex
 }		t_pipex;
 
 // Error Handling
-void	error_msg(char *msg, char *ag, t_pipex *pipex);
+void	error_msg(char *msg, char *ag);
 
 // Utils
 
 char	*find_path(char **envp);
 void	pipe_closer(t_pipex *pipex);
+void	free_arr(char **array);
 void	free_parent(t_pipex *pipex);
 void	free_child(t_pipex *pipex);
 
