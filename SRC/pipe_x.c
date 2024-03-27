@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 21:33:37 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/27 17:42:29 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,14 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 	close(pipex.fd[0]);
 	dup2(pipex.filein, 0);
 	close(pipex.filein);
-	pipex.cmd_a = ft_split(ag[2], ' ');
+	quotes_scan(ag[2]);
+	pipex.cmd_a = ft_split(ag[2], 31);
 	if (pipex.cmd_a[0] == NULL)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
-	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
+	if (pipex.cmd_a[0][0] == '/')
+		pipex.cmd = pipex.cmd_a[0];
+	else
+		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
@@ -69,6 +73,9 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 
 void	child_process2(char **ag, char **envp, t_pipex pipex)
 {
+	int i;
+
+	i = 0;
 	pipex.fileout = open(ag[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.fileout < 0)
 		error_msg(ERR, ag[4]);
@@ -76,10 +83,20 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 	close(pipex.fd[1]);
 	dup2(pipex.fileout, 1);
 	close(pipex.fileout);
-	pipex.cmd_a = ft_split(ag[3], ' ');
+	quotes_scan(ag[3]);
+	pipex.cmd_a = ft_split(ag[3], 31);
+	while (pipex.cmd_a[i])
+	{
+		ft_putendl_fd(pipex.cmd_a[i], 2);
+		i++;
+	}
+	ft_putendl_fd(pipex.cmd_a[i], 2);
 	if (pipex.cmd_a[0] == NULL)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
-	pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
+	if (pipex.cmd_a[0][0] == '/')
+		pipex.cmd = pipex.cmd_a[0];
+	else
+		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
@@ -117,6 +134,8 @@ int	main(int ac, char **ag, char **envp)
 }
 
 /*
+	27.3 updates: scan the agc first and replace sp(32) with 31 unless you encounter a ' or " then you ignore the space until another ' or " to close the argument. can't do "awk '{print "Hello"}'" as an argument. I get awk & {print Hello} instead of {print "Hello"}
+	
 	26.3 updates 2: fix the error code, its now giving the correct error code. The tester is still not passing. Especially if the commands itself has "" marks.
 	
 	26.3 updates: need to return the wexitstatus in waitpid to make sure that I return the right exit code. I am piping correctly and currently no memory leaks. 

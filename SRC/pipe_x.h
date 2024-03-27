@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 21:10:54 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/27 17:20:48 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	pipe_closer(t_pipex *pipex);
 void	free_arr(char **array);
 void	free_parent(t_pipex *pipex);
 void	free_child(t_pipex *pipex);
-
+void	quotes_scan(char *str);
 //Processes
 void	child_process1(char **ag, char **envp, t_pipex pipex);
 void	child_process2(char **ag, char **envp, t_pipex pipex);

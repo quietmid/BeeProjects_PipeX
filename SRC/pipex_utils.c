@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/26 21:23:01 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/27 17:41:31 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ char	*find_path(char **envp)
 	return (*envp + 5);
 }
 
-
 void	free_arr(char **array)
 {
 	int	i;
@@ -63,4 +62,31 @@ void	pipe_closer(t_pipex *pipex)
 {
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
+}
+
+void	quotes_scan(char *str)
+{
+	int		i;
+	int		count;
+	char	c;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ' && (count == 0 || count == 2))
+			str[i] = 31;
+		if (str[i] == c)
+		{
+			count += 1;
+			str[i] = 31;
+		}
+		if ((str[i] == 39 || str[i] == 34) && count == 0)
+		{
+			c = str[i];
+			count += 1;
+			str[i] = 31;
+		}
+		i++;
+	}
 }
