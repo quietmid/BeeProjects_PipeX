@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/27 17:41:31 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/28 13:34:20 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	quotes_scan(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if (str[i] == ' ' && (count == 0 || count == 2))
+		if ((str[i] == ' ' || str[i] == '	') && (count == 0 || count == 2))
 			str[i] = 31;
 		if (str[i] == c)
 		{

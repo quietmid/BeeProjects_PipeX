@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_x.h                                           :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/28 14:09:54 by jlu              ###   ########.fr       */
+/*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
+/*   Updated: 2024/03/28 15:43:00 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPE_X_H
-# define PIPE_X_H
+#ifndef	PIPE_X_BONUS_H
+# define PIPE_X_BONUS_H
 
 // other functions library
 # include "../libft/libft.h"
@@ -26,15 +26,15 @@
 # include <errno.h>
 
 //error definition
-# define ERR_INPUT "Cmon man, do you know how to count up to four?"
+
 # define ERR_CMD "command not found"
 # define ERR ""
 
 typedef struct s_pipex
 {
-	pid_t	pid1;
-	pid_t	pid2;
-	int		fd[2];
+	pid_t	*pid;
+	int		(*fd)[2];
+	int		ag_count;
 	int		filein;
 	int		fileout;
 	int		status;
@@ -43,20 +43,5 @@ typedef struct s_pipex
 	char	**path_cmds;
 	char	**cmd_a;
 }		t_pipex;
-
-// Error Handling
-void	error_msg(char *msg, char *ag);
-
-// Utils
-
-char	*find_path(char **envp);
-void	pipe_closer(t_pipex *pipex);
-void	free_arr(char **array);
-void	free_parent(t_pipex *pipex);
-void	free_child(t_pipex *pipex);
-void	quotes_scan(char *str);
-//Processes
-void	child_process1(char **ag, char **envp, t_pipex pipex);
-void	child_process2(char **ag, char **envp, t_pipex pipex);
 
 #endif

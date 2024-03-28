@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/27 17:42:29 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/28 13:51:15 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ void	waiting(t_pipex *pipex)
 	if (WIFEXITED(status))
 		pipex->status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-        pipex->status = WTERMSIG(status);
-	//printf("Child process2 exited with status: %d\n", WEXITSTATUS(status));
+		pipex->status = WTERMSIG(status);
 }
 
 //join the command with the path and use access to find the command
@@ -73,9 +72,6 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 
 void	child_process2(char **ag, char **envp, t_pipex pipex)
 {
-	int i;
-
-	i = 0;
 	pipex.fileout = open(ag[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex.fileout < 0)
 		error_msg(ERR, ag[4]);
@@ -85,12 +81,6 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 	close(pipex.fileout);
 	quotes_scan(ag[3]);
 	pipex.cmd_a = ft_split(ag[3], 31);
-	while (pipex.cmd_a[i])
-	{
-		ft_putendl_fd(pipex.cmd_a[i], 2);
-		i++;
-	}
-	ft_putendl_fd(pipex.cmd_a[i], 2);
 	if (pipex.cmd_a[0] == NULL)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (pipex.cmd_a[0][0] == '/')
