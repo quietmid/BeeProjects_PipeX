@@ -6,12 +6,12 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/29 15:53:47 by jlu              ###   ########.fr       */
+/*   Updated: 2024/03/30 13:39:38 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PIPE_X_BONUS_H
-# define PIPE_X_BONUS_H
+#ifndef	PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 // other functions library
 # include "../libft/libft.h"

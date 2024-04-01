@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/29 17:13:20 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/01 19:33:53 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,14 @@ int	main(int ac, char **ag, char **envp)
 	}
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
-	
+	if (!pipex.path_cmds)
+		error_msg(ERR, NULL);
+	pipex.idx = -1;
+	while (pipex.idx < pipex.cmd_n)
+		child_process(ag, envp, pipex);
+	// close pipes
+	// waitpid
+	// free
 }
 
 /**/
