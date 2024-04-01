@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/30 13:39:38 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/01 21:48:55 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ typedef struct s_pipex
 }		t_pipex;
 
 //child process
-void	child_process(char **ag, char **envp, t_pipex pipex, int i);
+void	child_process(char **ag, char **envp, t_pipex pipex);
 
 #endif
