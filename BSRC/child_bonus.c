@@ -6,11 +6,29 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/30 13:39:21 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/02 17:55:45 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+static char	*exe_cmd(char *ag, char **path)
+{
+	char	*tmp;
+	char	*command;
+
+	while (*path)
+	{
+		tmp = ft_strjoin(*path, "/");
+		command = ft_strjoin(tmp, ag);
+		free(tmp);
+		if (access(command, 0) == 0)
+			return (command);
+		free(command);
+		path++;
+	}
+	return (NULL);
+}
 
 void	quotes_scan(char *str)
 {
@@ -48,14 +66,14 @@ static void		sub_dup2(int zero, int first)
 void	child_process(char **ag, char **envp, t_pipex pipex)
 {
 	pipex.pid = fork();
-	if (pipex.pid < 0)
-		error_msg(ERR, NULL);
+	//if (pipex.pid < 0)
+	//	error_msg(ERR, NULL);
 	if (pipex.idx == 0)
-		sub_dup2(pipex.filein, pipex.fd[0][1]);
+		sub_dup2(pipex.filein, pipex.fd[1]);
 	else if (pipex.idx == (pipex.cmd_n - 1))
-		sub_dup2(pipex.fd[pipex.idx][0], pipex.fileout);
+		sub_dup2(pipex.fd[2 * pipex.idx - 2], pipex.fileout);
 	else
-		sub_dup2(pipex.fd[pipex.idx][0], pipex.fd[pipex.idx + 1][1]);
+		sub_dup2(pipex.fd[2 * pipex.idx - 2], pipex.fd[2 * pipex.idx + 1]);
 	pipe_closer(&pipex);
 	quotes_scan(ag[2 + pipex.idx]);
 	pipex.cmd_a = ft_split(ag[2 + pipex.idx], 31);
@@ -67,6 +85,7 @@ void	child_process(char **ag, char **envp, t_pipex pipex)
 		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
 	if (!pipex.cmd)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
+	ft_putstr_fd("im here\n", 2);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
 	{
 		free_arr(pipex.cmd_a);

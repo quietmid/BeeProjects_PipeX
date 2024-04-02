@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/01 21:48:55 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/02 17:17:13 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@
 //error definition
 
 # define ERR_CMD "command not found"
+# define ERR_INPUT "trap card activated: not enough inputs"
 # define ERR ""
 
 typedef struct s_pipex
 {
 	pid_t	pid;
-	int		(*fd)[2];
+	int		*fd;
 	int		cmd_n;
+	int		pipe_n;
 	int		idx;
 	int		filein;
 	int		fileout;
@@ -45,7 +47,17 @@ typedef struct s_pipex
 	char	**cmd_a;
 }		t_pipex;
 
-//child process
+//util
+void	pipe_closer(t_pipex *pipex);
+char	*find_path(char **envp);
+void	error_msg(char *err, char *ag);
+void	quotes_scan(char *str);
+void	waiting(t_pipex *pipex);
+void	free_arr(char **array);
+
+//pipe & child process
 void	child_process(char **ag, char **envp, t_pipex pipex);
+void	get_filein(char **ag, t_pipex *pipex);
+void	get_fileout(char *ag, t_pipex *pipex);
 
 #endif

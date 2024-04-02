@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 17:13:04 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/29 17:13:18 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/02 17:04:57 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,14 @@ void	error_msg(char *err, char *ag)
 	}
 	perror("");
 	exit (EXIT_FAILURE);
+}
+
+void	free_arr(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+		free(array[i++]);
+	free(array);
 }
