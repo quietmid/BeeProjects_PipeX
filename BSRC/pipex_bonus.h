@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/02 17:17:13 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/03 16:26:51 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@
 
 typedef struct s_pipex
 {
-	pid_t	pid;
-	int		*fd;
+	pid_t	*pid;
+	int		**fd;
 	int		cmd_n;
 	int		pipe_n;
 	int		idx;

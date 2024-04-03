@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/02 17:57:36 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/03 16:53:15 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	pipe_closer(t_pipex *pipex)
 	i = 0;
 	while (i < pipe_n)
 	{
-		close(pipex->fd[i]);
+		close(pipex->fd[i][0]);
+		close(pipex->fd[i][1]);
 		i++;
 	}
 }
@@ -63,14 +64,39 @@ void	waiting(t_pipex *pipex)
 static void	pipes_creator(t_pipex *pipex)
 {
 	int	i;
+	int j;
 
+	j = 0;
 	i = 0;
+	pipex->fd = (int **)malloc(pipex->pipe_n * sizeof(int *));
+	if (!pipex->fd)
+		error_msg(ERR, NULL);
+	while (j < pipex->pipe_n)
+	{
+		pipex->fd[j] = (int *)malloc(2 * sizeof(int));
+		if (!pipex->fd[j])
+			error_msg(ERR, NULL);
+		j++;
+	}
 	while (i < pipex->cmd_n - 1)
 	{
-		if (pipe(pipex->fd + 2 * i) < 0)
+		if (pipe(pipex->fd[i]) < 0)
 			error_msg(ERR, NULL);
 		i++;
 	}
+	pipex->pid = (int *)malloc(sizeof(int) + pipex->pipe_n);
+	if (!pipex->pid)
+		error_msg(ERR, NULL);
+}
+
+static int	the_piper(t_pipex *pipex, char **ag, char **envp)
+{
+	int status;
+	int	i;
+
+	
+
+	return (status);
 }
 
 int	main(int ac, char **ag, char **envp)
@@ -84,17 +110,23 @@ int	main(int ac, char **ag, char **envp)
 	pipex.cmd_n = ac - 3; // - heredoc
 	pipex.pipe_n = (pipex.cmd_n - 1) * 2; // for both ends
 	pipex.status = 0;
-	pipex.fd = (int *)malloc(pipex.pipe_n * sizeof(int));
-	if (!pipex.fd)
-		error_msg(ERR, NULL);
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	if (!pipex.path_cmds)
 		error_msg(ERR, NULL);
 	pipes_creator(&pipex);
-	pipex.idx = -1;
-	while (++(pipex.idx) < pipex.cmd_n)
+	pipex.idx = 0;
+
+	// pid should be *pid and run the while loop and whild pid[i] == 0, its when I run the child process
+	//dprintf(2, "pipex.cmd_n:%d\n", pipex.cmd_n);
+	while (pipex.idx < pipex.cmd_n)
+	{
+		dprintf(2, "pipex.idx--%d\n", pipex.idx);
+		ft_putstr_fd("debug2\n", 2);
 		child_process(ag, envp, pipex);
+		ft_putstr_fd("debug3\n", 2);
+		pipex.idx++;
+	}
 	pipe_closer(&pipex);
 	waitpid(-1, NULL, 0);
 	//waiting(&pipex);
@@ -103,6 +135,7 @@ int	main(int ac, char **ag, char **envp)
 }
 
 /*
+	3.4	using dprintf
 	2.4 updated the pipe situation instead of trying to make it like fd[i][2], it will be single fd[i], with odd number being write and even number being read end. not sure where it is seg faulting. updated my makefile, so it compiles bonus now
 	
 	1.4 added the pipe closer function that closes all the pipe at the end. I should probably also use that in the child process. The wait function, I should see if I can just wait for any child process or just the last one.
