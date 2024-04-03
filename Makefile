@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/02 14:43:10 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/03 19:41:08 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,8 +60,9 @@ $(OBJECTS_DIR)/%.o: ./SRC/%.c
 bonus: .bonus
 
 .bonus: $(LIBFT) $(BOBJECTS)
+		@rm -f pipe_x.o
 		@echo "Compiled with $(BLUE)$(CFLAGS)$(RESET)"
-		@$(CC) $(CFLAGS) $(BOBJECTS) $(LIBFT) -o $(NAME) 
+		@$(CC) $(CFLAGS) $(BOBJECTS) $(LIBFT) -o $(NAME)
 		@echo "$(CYAN)--------------------------------"
 		@echo "$(NAME) = you have activated my bonus 😏!"
 		@echo "$(CYAN)--------------------------------$(RESET)"

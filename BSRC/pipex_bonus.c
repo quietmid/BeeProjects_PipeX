@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/03 16:53:15 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/03 19:40:38 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,21 @@ void	get_fileout(char *ag, t_pipex *pipex)
 		error_msg(ERR, ag);
 }
 
-void	waiting(t_pipex *pipex)
+static int	waiting(t_pipex *pipex)
 {
 	int	status;
+	int	i;
 
-	status = 0;
-	waitpid(pipex->pid, &status, 0);
-	if (WIFEXITED(status))
-		pipex->status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		pipex->status = WTERMSIG(status);
+	i = -1;
+	while (++i < pipex->pipe_n)
+	{
+		waitpid(pipex->pid[i], &status, 0);
+		if (WIFEXITED(status))
+			pipex->status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			pipex->status = WTERMSIG(status);
+	}
+	return (status);
 }
 
 static void	pipes_creator(t_pipex *pipex)
@@ -89,14 +94,19 @@ static void	pipes_creator(t_pipex *pipex)
 		error_msg(ERR, NULL);
 }
 
-static int	the_piper(t_pipex *pipex, char **ag, char **envp)
+void	the_piper(t_pipex *pipex, char **ag, char **envp)
 {
-	int status;
 	int	i;
 
-	
-
-	return (status);
+	i = -1;
+	while (++i < pipex->pipe_n)
+	{
+		pipex->pid[i] = fork();
+		if (pipex->pid[i] < 0)
+			error_msg(ERR, NULL);
+		if (pipex->pid[i] == 0)
+			child_process(ag, envp, *pipex, i);
+	}
 }
 
 int	main(int ac, char **ag, char **envp)
@@ -109,33 +119,20 @@ int	main(int ac, char **ag, char **envp)
 	get_fileout(ag[ac - 1], &pipex);
 	pipex.cmd_n = ac - 3; // - heredoc
 	pipex.pipe_n = (pipex.cmd_n - 1) * 2; // for both ends
-	pipex.status = 0;
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	if (!pipex.path_cmds)
 		error_msg(ERR, NULL);
 	pipes_creator(&pipex);
-	pipex.idx = 0;
-
-	// pid should be *pid and run the while loop and whild pid[i] == 0, its when I run the child process
-	//dprintf(2, "pipex.cmd_n:%d\n", pipex.cmd_n);
-	while (pipex.idx < pipex.cmd_n)
-	{
-		dprintf(2, "pipex.idx--%d\n", pipex.idx);
-		ft_putstr_fd("debug2\n", 2);
-		child_process(ag, envp, pipex);
-		ft_putstr_fd("debug3\n", 2);
-		pipex.idx++;
-	}
+	the_piper(&pipex, ag, envp);
 	pipe_closer(&pipex);
-	waitpid(-1, NULL, 0);
-	//waiting(&pipex);
+	pipex.status = waiting(&pipex);
 	// free
-	return (0);
+	return (pipex.status);
 }
 
 /*
-	3.4	using dprintf
+	3.4	using dprintf. Placed fork() at the wrong place, it was in the child process instead in the parent process. 
 	2.4 updated the pipe situation instead of trying to make it like fd[i][2], it will be single fd[i], with odd number being write and even number being read end. not sure where it is seg faulting. updated my makefile, so it compiles bonus now
 	
 	1.4 added the pipe closer function that closes all the pipe at the end. I should probably also use that in the child process. The wait function, I should see if I can just wait for any child process or just the last one.
