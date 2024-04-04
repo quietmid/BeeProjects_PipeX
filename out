@@ -1,0 +1,15 @@
+total 80
+drwxr-xr-x   6 jlu  2020    204 Apr  4 14:04 BSRC
+-rw-r--r--   1 jlu  2020   2796 Apr  4 14:19 Makefile
+-rw-r--r--   1 jlu  2020     35 Mar  7 16:01 README.md
+drwxr-xr-x   5 jlu  2020    170 Mar 29 15:31 SRC
+-rw-r--r--   1 jlu  2020      0 Apr  4 17:41 hi
+-rwxrwxrwx   1 jlu  2020     11 Apr  3 15:49 infile
+-rw-r--r--   1 jlu  2020      5 Mar 22 16:11 input
+drwxr-xr-x  98 jlu  2020   3332 Apr  4 16:06 libft
+drwxr-xr-x   5 jlu  2020    170 Apr  4 17:52 obj
+-rwxrwxrwx   1 jlu  2020      0 Apr  4 17:52 out
+-rw-r--r--   1 jlu  2020      9 Mar 22 18:13 outfile
+-rw-r--r--   1 jlu  2020      9 Apr  4 16:15 output
+-rwxr-xr-x   1 jlu  2020  15584 Apr  4 17:52 pipex
+-rw-r--r--   1 jlu  2020      0 Apr  4 17:09 wc -l

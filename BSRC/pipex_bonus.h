@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/03 19:38:15 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/04 17:37:12 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	pipe_closer(t_pipex *pipex);
 char	*find_path(char **envp);
 void	error_msg(char *err, char *ag);
 void	quotes_scan(char *str);
+void	free_parent(t_pipex *pipex);
 void	free_arr(char **array);
 
 //pipe & child process

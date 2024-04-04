@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/03 19:20:57 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/04 17:11:57 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,11 @@ static void		sub_dup2(int zero, int first)
 void	child_process(char **ag, char **envp, t_pipex pipex, int i)
 {
 	if (i == 0)
-	{	
-		ft_putstr_fd("debug0\n", 2);
 		sub_dup2(pipex.filein, pipex.fd[0][1]);
-	}
 	else if (i == (pipex.pipe_n))
-		sub_dup2(pipex.fd[pipex.pipe_n][0], pipex.fileout);
+		sub_dup2(pipex.fd[i - 1][0], pipex.fileout);
 	else
-	{
-		ft_putstr_fd("debug1\n", 2);
-		sub_dup2(pipex.fd[i][0], pipex.fd[i + 1][1]);
-	}
+		sub_dup2(pipex.fd[i - 1][0], pipex.fd[i][1]);
 	pipe_closer(&pipex);
 	quotes_scan(ag[2 + i]);
 	pipex.cmd_a = ft_split(ag[2 + i], 31);

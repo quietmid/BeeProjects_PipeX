@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/03 19:40:38 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/04 17:53:40 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,13 @@ void	get_filein(char **ag, t_pipex *pipex)
 {
 	pipex->filein = open(ag[1], O_RDONLY);
 	if (pipex->filein < 0)
-		error_msg(ERR, ag[1]);
+	{
+		ft_putstr_fd("pipex: ", 2);
+		ft_putstr_fd(ag[1], 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
+		exit (EXIT_SUCCESS);
+	}
 }
 
 void	get_fileout(char *ag, t_pipex *pipex)
@@ -55,13 +61,13 @@ static int	waiting(t_pipex *pipex)
 	int	i;
 
 	i = -1;
-	while (++i < pipex->pipe_n)
+	while (++i <= pipex->pipe_n)
 	{
 		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
-			pipex->status = WEXITSTATUS(status);
+			status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			pipex->status = WTERMSIG(status);
+			status = WTERMSIG(status);
 	}
 	return (status);
 }
@@ -89,7 +95,7 @@ static void	pipes_creator(t_pipex *pipex)
 			error_msg(ERR, NULL);
 		i++;
 	}
-	pipex->pid = (int *)malloc(sizeof(int) + pipex->pipe_n);
+	pipex->pid = (int *)malloc(sizeof(int) * pipex->pipe_n);
 	if (!pipex->pid)
 		error_msg(ERR, NULL);
 }
@@ -99,7 +105,7 @@ void	the_piper(t_pipex *pipex, char **ag, char **envp)
 	int	i;
 
 	i = -1;
-	while (++i < pipex->pipe_n)
+	while (++i <= pipex->pipe_n)
 	{
 		pipex->pid[i] = fork();
 		if (pipex->pid[i] < 0)
@@ -118,7 +124,7 @@ int	main(int ac, char **ag, char **envp)
 	get_filein(ag, &pipex);
 	get_fileout(ag[ac - 1], &pipex);
 	pipex.cmd_n = ac - 3; // - heredoc
-	pipex.pipe_n = (pipex.cmd_n - 1) * 2; // for both ends
+	pipex.pipe_n = pipex.cmd_n - 1;
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	if (!pipex.path_cmds)
@@ -127,11 +133,12 @@ int	main(int ac, char **ag, char **envp)
 	the_piper(&pipex, ag, envp);
 	pipe_closer(&pipex);
 	pipex.status = waiting(&pipex);
-	// free
+	free_parent(&pipex);
 	return (pipex.status);
 }
 
 /*
+	4.4 got it to work by fixing the right number of pipes. hard coded for filein exit code since filein isn't in waitpid so the waiting function doesn't matter. 5.4 need to add here_doc and understand what here_doc means
 	3.4	using dprintf. Placed fork() at the wrong place, it was in the child process instead in the parent process. 
 	2.4 updated the pipe situation instead of trying to make it like fd[i][2], it will be single fd[i], with odd number being write and even number being read end. not sure where it is seg faulting. updated my makefile, so it compiles bonus now
 	

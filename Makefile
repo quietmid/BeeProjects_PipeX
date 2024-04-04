@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/03 19:41:08 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/04 14:19:06 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,15 +57,16 @@ $(OBJECTS_DIR)/%.o: ./SRC/%.c
 		@echo "Compiled $(GREEN) $^ $(RESET)"
 		@$(CC) $(CFLAGS) -c -o $@ $^
 
-bonus: .bonus
+bonus: $(BSRC) .bonus
 
 .bonus: $(LIBFT) $(BOBJECTS)
-		@rm -f pipe_x.o
 		@echo "Compiled with $(BLUE)$(CFLAGS)$(RESET)"
+		@touch .bonus
 		@$(CC) $(CFLAGS) $(BOBJECTS) $(LIBFT) -o $(NAME)
 		@echo "$(CYAN)--------------------------------"
 		@echo "$(NAME) = you have activated my bonus 😏!"
 		@echo "$(CYAN)--------------------------------$(RESET)"
+		@rm -f $(OBJECTS)
 
 $(OBJECTS_DIR)/%.o: ./BSRC/%.c
 		@mkdir -p $(OBJECTS_DIR)
@@ -75,6 +76,7 @@ $(OBJECTS_DIR)/%.o: ./BSRC/%.c
 clean:
 		@$(MAKE) clean -C ./libft
 		@rm -rf $(OBJECTS_DIR)/*.o
+		@rm -rf .bonus
 		@rm -rf obj
 		@echo "$(WHITE) $(OBJECTS_DIR) $(GREEN) REMOVED"
 
