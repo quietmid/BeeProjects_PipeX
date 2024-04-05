@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/04 17:54:51 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/05 16:08:02 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,14 @@ int	main(int ac, char **ag, char **envp)
 {
 	t_pipex	pipex;
 
-	if (ac < 5)
+	if (ac < arg_count(ag[1], &pipex))
 		error_msg(ERR_INPUT, NULL);
-	get_filein(ag, &pipex);
+	if (pipex.here_doc == 1)
+		ft_here_doc(ag[2], &pipex);
+	else
+		get_filein(ag, &pipex);
 	get_fileout(ag[ac - 1], &pipex);
-	pipex.cmd_n = ac - 3; // - heredoc
+	pipex.cmd_n = ac - 3 - pipex.here_doc;
 	pipex.pipe_n = pipex.cmd_n - 1;
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
@@ -138,6 +141,8 @@ int	main(int ac, char **ag, char **envp)
 }
 
 /*
+	5.4 adding here_doc but it is not working properly. It exits right away. Maybe I should use Elias method, just write into the terminal instead of creating a temp file.
+	
 	4.4 got it to work by fixing the right number of pipes. hard coded for filein exit code since filein isn't in waitpid so the waiting function doesn't matter. 5.4 need to add here_doc and understand what here_doc means also need to test with more cmds #
 	3.4	using dprintf. Placed fork() at the wrong place, it was in the child process instead in the parent process. 
 	2.4 updated the pipe situation instead of trying to make it like fd[i][2], it will be single fd[i], with odd number being write and even number being read end. not sure where it is seg faulting. updated my makefile, so it compiles bonus now

@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/04 17:37:12 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/05 16:03:30 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@
 
 # define ERR_CMD "command not found"
 # define ERR_INPUT "trap card activated: not enough inputs"
+# define ERR_HD "here_doc"
 # define ERR ""
+
+
 
 typedef struct s_pipex
 {
 	pid_t	*pid;
+	int		here_doc;
 	int		**fd;
 	int		cmd_n;
 	int		pipe_n;
@@ -45,6 +49,10 @@ typedef struct s_pipex
 	char	**path_cmds;
 	char	**cmd_a;
 }		t_pipex;
+
+// here_doc
+void	ft_here_doc(char *ag, t_pipex *pipex);
+int		arg_count(char *ag, t_pipex *pipex);
 
 //util
 void	pipe_closer(t_pipex *pipex);

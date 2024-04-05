@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/04 14:19:06 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/05 14:44:53 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC = ./SRC/pipe_x.c \
 BSRC = ./BSRC/pipex_bonus.c \
 	   ./BSRC/child_bonus.c \
 	   ./BSRC/util_bonus.c \
+	   ./BSRC/heredoc_bonus.c \
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g #remove -g
