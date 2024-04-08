@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:27:22 by jlu               #+#    #+#             */
-/*   Updated: 2024/01/31 14:12:28 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/08 15:02:05 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	*ft_strdup(const char *str1);
 void	ft_putchar_fd(char c, int fd);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
+int		ft_strcmp(char *s1, char *s2);
 int		ft_isalnum(int c);
 int		ft_isalpha(int n);
 int		ft_isascii(int c);

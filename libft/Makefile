@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/17 16:27:29 by jlu               #+#    #+#              #
-#    Updated: 2024/03/26 20:16:11 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/08 15:02:17 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRC = ft_atoi.c \
 	  ft_strlcpy.c \
 	  ft_strlen.c \
 	  ft_strncmp.c \
+	  ft_strcmp.c \
 	  ft_strnstr.c \
 	  ft_strrchr.c \
 	  ft_tolower.c \

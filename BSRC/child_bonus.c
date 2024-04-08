@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/04 17:11:57 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/08 13:46:31 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	child_process(char **ag, char **envp, t_pipex pipex, int i)
 	else
 		sub_dup2(pipex.fd[i - 1][0], pipex.fd[i][1]);
 	pipe_closer(&pipex);
+	if (pipex.here_doc == 1)
+		i += 1;
 	quotes_scan(ag[2 + i]);
 	pipex.cmd_a = ft_split(ag[2 + i], 31);
 	if (pipex.cmd_a[0] == NULL)

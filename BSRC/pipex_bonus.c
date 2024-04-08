@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/05 16:08:02 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/08 17:20:19 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,13 @@ int	main(int ac, char **ag, char **envp)
 	pipe_closer(&pipex);
 	pipex.status = waiting(&pipex);
 	free_parent(&pipex);
+	system("leaks pipex");
 	return (pipex.status);
 }
 
 /*
+	5.5 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this
+	
 	5.4 adding here_doc but it is not working properly. It exits right away. Maybe I should use Elias method, just write into the terminal instead of creating a temp file.
 	
 	4.4 got it to work by fixing the right number of pipes. hard coded for filein exit code since filein isn't in waitpid so the waiting function doesn't matter. 5.4 need to add here_doc and understand what here_doc means also need to test with more cmds #

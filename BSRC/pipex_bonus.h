@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/05 16:03:30 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/08 14:23:36 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define ERR_HD "here_doc"
 # define ERR ""
 
-
+# define BUFF_SIZE 500
 
 typedef struct s_pipex
 {
