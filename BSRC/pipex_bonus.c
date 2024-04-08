@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/08 17:20:19 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/08 17:20:58 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	main(int ac, char **ag, char **envp)
 }
 
 /*
-	5.5 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this
+	5.5 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this. Tasks for tomorrow. Fix normi error
 	
 	5.4 adding here_doc but it is not working properly. It exits right away. Maybe I should use Elias method, just write into the terminal instead of creating a temp file.
 	
