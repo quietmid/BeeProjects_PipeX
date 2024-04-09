@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 17:13:04 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/08 17:17:03 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/09 17:30:35 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,30 @@ void	free_arr(char **array)
 	while (array[i] != NULL)
 		free(array[i++]);
 	free(array);
+}
+
+char	*find_path(char **envp, char *ag)
+{
+	while (ft_strncmp("PATH", *envp, 4))
+	{	
+		envp++;
+		if (!*envp)
+			error_msg(ERR_CMD, ag);
+	}
+	return (*envp + 5);
+}
+
+void	pipe_closer(t_pipex *pipex)
+{
+	int	i;
+	int	pipe_n;
+
+	pipe_n = pipex->cmd_n - 1;
+	i = 0;
+	while (i < pipe_n)
+	{
+		close(pipex->fd[i][0]);
+		close(pipex->fd[i][1]);
+		i++;
+	}
 }

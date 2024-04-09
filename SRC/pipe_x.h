@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/03/28 14:09:54 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/09 19:11:20 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/types.h>
-# include <errno.h>
 
 //error definition
 # define ERR_INPUT "Cmon man, do you know how to count up to four?"
@@ -48,13 +47,13 @@ typedef struct s_pipex
 void	error_msg(char *msg, char *ag);
 
 // Utils
-
-char	*find_path(char **envp);
-void	pipe_closer(t_pipex *pipex);
+char	*find_path(char **envp, char **ag);
+void	waiting(t_pipex *pipex);
 void	free_arr(char **array);
 void	free_parent(t_pipex *pipex);
 void	free_child(t_pipex *pipex);
 void	quotes_scan(char *str);
+
 //Processes
 void	child_process1(char **ag, char **envp, t_pipex pipex);
 void	child_process2(char **ag, char **envp, t_pipex pipex);

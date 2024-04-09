@@ -6,34 +6,11 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/08 17:20:58 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/09 19:15:32 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-
-char	*find_path(char **envp)
-{
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
-}
-
-void	pipe_closer(t_pipex *pipex)
-{
-	int i;
-	int pipe_n;
-	
-	pipe_n = pipex->cmd_n - 1;
-	i = 0;
-	while (i < pipe_n)
-	{
-		close(pipex->fd[i][0]);
-		close(pipex->fd[i][1]);
-		i++;
-	}
-}
 
 void	get_filein(char **ag, t_pipex *pipex)
 {
@@ -44,7 +21,6 @@ void	get_filein(char **ag, t_pipex *pipex)
 		ft_putstr_fd(ag[1], 2);
 		ft_putstr_fd(": ", 2);
 		perror("");
-		exit (EXIT_SUCCESS);
 	}
 }
 
@@ -75,7 +51,7 @@ static int	waiting(t_pipex *pipex)
 static void	pipes_creator(t_pipex *pipex)
 {
 	int	i;
-	int j;
+	int	j;
 
 	j = 0;
 	i = 0;
@@ -100,21 +76,6 @@ static void	pipes_creator(t_pipex *pipex)
 		error_msg(ERR, NULL);
 }
 
-void	the_piper(t_pipex *pipex, char **ag, char **envp)
-{
-	int	i;
-
-	i = -1;
-	while (++i <= pipex->pipe_n)
-	{
-		pipex->pid[i] = fork();
-		if (pipex->pid[i] < 0)
-			error_msg(ERR, NULL);
-		if (pipex->pid[i] == 0)
-			child_process(ag, envp, *pipex, i);
-	}
-}
-
 int	main(int ac, char **ag, char **envp)
 {
 	t_pipex	pipex;
@@ -128,7 +89,7 @@ int	main(int ac, char **ag, char **envp)
 	get_fileout(ag[ac - 1], &pipex);
 	pipex.cmd_n = ac - 3 - pipex.here_doc;
 	pipex.pipe_n = pipex.cmd_n - 1;
-	pipex.path = find_path(envp);
+	pipex.path = find_path(envp, ag[2]);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	if (!pipex.path_cmds)
 		error_msg(ERR, NULL);
@@ -137,12 +98,13 @@ int	main(int ac, char **ag, char **envp)
 	pipe_closer(&pipex);
 	pipex.status = waiting(&pipex);
 	free_parent(&pipex);
-	system("leaks pipex");
+	//system("leaks pipex");
 	return (pipex.status);
 }
 
 /*
-	5.5 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this. Tasks for tomorrow. Fix normi error
+	9.4 if unset the PATH and change permission file, my exit code is different. 
+	5.4 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this. Tasks for tomorrow. Fix normi error
 	
 	5.4 adding here_doc but it is not working properly. It exits right away. Maybe I should use Elias method, just write into the terminal instead of creating a temp file.
 	

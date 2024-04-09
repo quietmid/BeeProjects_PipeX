@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/08 13:46:31 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/09 14:31:49 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,22 @@ void	quotes_scan(char *str)
 	}
 }
 
-static void		sub_dup2(int zero, int first)
+void	the_piper(t_pipex *pipex, char **ag, char **envp)
+{
+	int	i;
+
+	i = -1;
+	while (++i <= pipex->pipe_n)
+	{
+		pipex->pid[i] = fork();
+		if (pipex->pid[i] < 0)
+			error_msg(ERR, NULL);
+		if (pipex->pid[i] == 0)
+			child_process(ag, envp, *pipex, i);
+	}
+}
+
+static void	sub_dup2(int zero, int first)
 {
 	dup2(zero, 0);
 	dup2(first, 1);

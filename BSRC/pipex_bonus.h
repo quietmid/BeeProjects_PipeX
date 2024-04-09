@@ -6,11 +6,11 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/08 14:23:36 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/09 17:30:05 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PIPEX_BONUS_H
+#ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
 
 // other functions library
@@ -23,7 +23,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/types.h>
-# include <errno.h>
 
 //error definition
 
@@ -56,13 +55,14 @@ int		arg_count(char *ag, t_pipex *pipex);
 
 //util
 void	pipe_closer(t_pipex *pipex);
-char	*find_path(char **envp);
+char	*find_path(char **envp, char *ag);
 void	error_msg(char *err, char *ag);
 void	quotes_scan(char *str);
 void	free_parent(t_pipex *pipex);
 void	free_arr(char **array);
 
 //pipe & child process
+void	the_piper(t_pipex *pipex, char **ag, char **envp);
 void	child_process(char **ag, char **envp, t_pipex pipex, int idx);
 void	get_filein(char **ag, t_pipex *pipex);
 void	get_fileout(char *ag, t_pipex *pipex);
