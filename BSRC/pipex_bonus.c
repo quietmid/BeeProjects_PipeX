@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/09 19:15:32 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/10 17:03:34 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,23 @@ void	get_filein(char **ag, t_pipex *pipex)
 {
 	pipex->filein = open(ag[1], O_RDONLY);
 	if (pipex->filein < 0)
-	{
-		ft_putstr_fd("pipex: ", 2);
-		ft_putstr_fd(ag[1], 2);
-		ft_putstr_fd(": ", 2);
-		perror("");
-	}
+		error_msg(ERR, ag[1]);
 }
 
 void	get_fileout(char *ag, t_pipex *pipex)
 {
-	pipex->fileout = open(ag, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex->fileout < 0)
-		error_msg(ERR, ag);
+	if (pipex->here_doc == 0)
+	{
+		pipex->fileout = open(ag, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (pipex->fileout < 0)
+			error_msg(ERR, ag);
+	}
+	else
+	{
+		pipex->fileout = open(ag, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (pipex->fileout < 0)
+			error_msg(ERR, ag);
+	}
 }
 
 static int	waiting(t_pipex *pipex)
@@ -84,17 +88,13 @@ int	main(int ac, char **ag, char **envp)
 		error_msg(ERR_INPUT, NULL);
 	if (pipex.here_doc == 1)
 		ft_here_doc(ag[2], &pipex);
-	else
-		get_filein(ag, &pipex);
-	get_fileout(ag[ac - 1], &pipex);
+	pipex.last_ag = ac - 1;
 	pipex.cmd_n = ac - 3 - pipex.here_doc;
 	pipex.pipe_n = pipex.cmd_n - 1;
-	pipex.path = find_path(envp, ag[2]);
+	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
-	if (!pipex.path_cmds)
-		error_msg(ERR, NULL);
 	pipes_creator(&pipex);
-	the_piper(&pipex, ag, envp);
+	the_piper(pipex, ag, envp);
 	pipe_closer(&pipex);
 	pipex.status = waiting(&pipex);
 	free_parent(&pipex);

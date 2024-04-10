@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/09 19:10:28 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/10 16:43:52 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,16 @@ void	error_msg(char *err, char *ag)
 }
 
 // go through the envp and search for PATH then get that string after the PATH 
-char	*find_path(char **envp, char **ag)
+char	*find_path(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (ft_strncmp("PATH", *envp, 4))
-	{	
+	{
 		envp++;
 		if (!*envp)
-		{
-			while (i < 2)
-			{
-				ft_putstr_fd("pipex: ", 2);
-				ft_putstr_fd(ag[2 + i], 2);
-				ft_putstr_fd(": ", 2);
-				ft_putendl_fd(ERR_CMD, 2);
-				i++;
-			}
-			exit (127);
-		}
+			return (NULL);
 	}
 	return (*envp + 5);
 }
@@ -70,9 +60,12 @@ void	free_arr(char **array)
 	int	i;
 
 	i = 0;
-	while (array[i] != NULL)
-		free(array[i++]);
-	free(array);
+	if (array)
+	{
+		while (array[i] != NULL)
+			free(array[i++]);
+		free(array);
+	}
 }
 
 void	waiting(t_pipex *pipex)

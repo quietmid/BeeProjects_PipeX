@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/05 14:44:53 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/10 17:44:30 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC = ./SRC/pipe_x.c \
 
 BSRC = ./BSRC/pipex_bonus.c \
 	   ./BSRC/child_bonus.c \
+	   ./BSRC/child_supp_bonus.c \
 	   ./BSRC/util_bonus.c \
 	   ./BSRC/heredoc_bonus.c \
 
@@ -78,6 +79,7 @@ clean:
 		@$(MAKE) clean -C ./libft
 		@rm -rf $(OBJECTS_DIR)/*.o
 		@rm -rf .bonus
+		@rm -rf .here_doc_temp
 		@rm -rf obj
 		@echo "$(WHITE) $(OBJECTS_DIR) $(GREEN) REMOVED"
 

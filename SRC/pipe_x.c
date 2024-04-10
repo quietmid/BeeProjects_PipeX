@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/09 19:15:09 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/10 16:43:26 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,18 @@ static char	*exe_cmd(char *ag, char **path)
 	char	*tmp;
 	char	*command;
 
-	while (*path)
+	if (path)
 	{
-		tmp = ft_strjoin(*path, "/");
-		command = ft_strjoin(tmp, ag);
-		free(tmp);
-		if (access(command, 0) == 0)
-			return (command);
-		free(command);
-		path++;
+		while (*path)
+		{
+			tmp = ft_strjoin(*path, "/");
+			command = ft_strjoin(tmp, ag);
+			free(tmp);
+			if (access(command, 0) == 0)
+				return (command);
+			free(command);
+			path++;
+		}
 	}
 	return (NULL);
 }
@@ -95,10 +98,8 @@ int	main(int ac, char **ag, char **envp)
 		error_msg(ERR_INPUT, NULL);
 	if (pipe(pipex.fd) < 0)
 		error_msg(ERR, NULL);
-	pipex.path = find_path(envp, ag);
+	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
-	if (!pipex.path_cmds)
-		error_msg(ERR, NULL);
 	pipex.pid1 = fork();
 	if (pipex.pid1 < 0)
 		error_msg(ERR, NULL);
