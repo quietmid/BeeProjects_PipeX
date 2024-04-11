@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/10 17:03:34 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/11 17:23:21 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,10 @@ int	main(int ac, char **ag, char **envp)
 	the_piper(pipex, ag, envp);
 	pipe_closer(&pipex);
 	pipex.status = waiting(&pipex);
+	if (pipex.here_doc == 1)
+		unlink(".here_doc_temp");
 	free_parent(&pipex);
-	//system("leaks pipex");
+	//getchar();
 	return (pipex.status);
 }
 

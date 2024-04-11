@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/10 16:43:26 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/11 17:23:32 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	main(int ac, char **ag, char **envp)
 		child_process2(ag, envp, pipex);
 	waiting(&pipex);
 	free_arr(pipex.path_cmds);
+	//getchar();
 	return (pipex.status);
 }
 
