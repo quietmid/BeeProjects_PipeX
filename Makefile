@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/10 17:44:30 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/12 17:39:06 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ BSRC = ./BSRC/pipex_bonus.c \
 	   ./BSRC/heredoc_bonus.c \
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g #remove -g
+CFLAGS = -Wall -Wextra -g -fsanitize=address
+#-g -fsanitize=address #remove -g
 
 #Color ANSI Code
 BOLD   := \033[1m./SRC/

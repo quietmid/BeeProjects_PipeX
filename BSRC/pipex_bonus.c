@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 16:42:54 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 17:40:20 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ static int	waiting(t_pipex *pipex)
 	int	status;
 	int	i;
 
+	status = 0;
 	i = -1;
-	while (++i <= pipex->pipe_n)
+	while (++i < pipex->pid_n)
 	{
 		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
@@ -49,6 +50,13 @@ static int	waiting(t_pipex *pipex)
 		else if (WIFSIGNALED(status))
 			status = WTERMSIG(status);
 	}
+	//while (1)
+	//{
+	//	if (wait(&status) == -1 && errno == ECHILD)
+	//		break ;
+	//	if (WIFEXITED(status))
+	//		status = WEXITSTATUS(status);
+	//}
 	return (status);
 }
 
@@ -75,7 +83,7 @@ static void	pipes_creator(t_pipex *pipex)
 			error_msg(ERR, NULL);
 		i++;
 	}
-	pipex->pid = (int *)malloc(sizeof(int) * pipex->pipe_n);
+	pipex->pid = (int *)malloc(sizeof(int) * pipex->pid_n);
 	if (!pipex->pid)
 		error_msg(ERR, NULL);
 }
@@ -83,7 +91,9 @@ static void	pipes_creator(t_pipex *pipex)
 int	main(int ac, char **ag, char **envp)
 {
 	t_pipex	pipex;
+	int status;
 
+	status = 0;
 	if (ac < arg_count(ag[1], &pipex))
 		error_msg(ERR_INPUT, NULL);
 	if (pipex.here_doc == 1)
@@ -101,7 +111,7 @@ int	main(int ac, char **ag, char **envp)
 		unlink(".here_doc_temp");
 	free_parent(&pipex);
 	//getchar();
-	return (pipex.status);
+	return (status);
 }
 
 /*

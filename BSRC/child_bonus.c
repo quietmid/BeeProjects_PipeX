@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/10 17:03:08 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 17:31:33 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	the_piper(t_pipex pipex, char **ag, char **envp)
 	int	i;
 
 	i = -1;
-	while (++i <= pipex.pipe_n)
+	while (++i < pipex.pid_n)
 	{
 		pipex.pid[i] = fork();
 		if (pipex.pid[i] < 0)
