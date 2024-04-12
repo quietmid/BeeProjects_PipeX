@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 17:31:33 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 18:09:36 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ static void	sub_dup2(int zero, int first)
 	dup2(first, 1);
 }
 
-static void	exe_support(const char *cmd, char **ag, char **envp)
+static void	exe_support(const char *cmd, char **ag, char **envp, t_pipex *pipex)
 {
 	if (execve(cmd, ag, envp) < 0)
 	{
 		free_arr(ag);
+		free_parent(pipex);
 		error_msg(ERR, NULL);
 	}
 }
@@ -88,5 +89,5 @@ void	child_process(char **ag, char **envp, t_pipex pipex, int i)
 		error_msg(ERR_NO, pipex.cmd_a[0]);
 	if (!pipex.cmd)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
-	exe_support(pipex.cmd, pipex.cmd_a, envp);
+	exe_support(pipex.cmd, pipex.cmd_a, envp, &pipex);
 }

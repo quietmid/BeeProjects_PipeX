@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 17:40:20 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 17:49:08 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	main(int ac, char **ag, char **envp)
 	pipex.last_ag = ac - 1;
 	pipex.cmd_n = ac - 3 - pipex.here_doc;
 	pipex.pipe_n = pipex.cmd_n - 1;
+	pipex.pid_n = pipex.pipe_n + 1;
 	pipex.path = find_path(envp);
 	pipex.path_cmds = ft_split(pipex.path, ':');
 	pipes_creator(&pipex);

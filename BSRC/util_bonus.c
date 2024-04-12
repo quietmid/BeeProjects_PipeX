@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 17:13:04 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 16:42:55 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 18:10:56 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,27 @@ void	free_parent(t_pipex *pipex)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (pipex->path_cmds)
 	{
-		while (pipex->path_cmds[++i])
+		while (pipex->path_cmds[i])
+		{
 			free(pipex->path_cmds[i]);
+			i++;
+		}
 		free(pipex->path_cmds);
 	}
-	//i = -1;
-	//if (pipex->fd)
-	//{
-	//	while (pipex->fd[++i])
-	//		free(pipex->fd[i]);
-	//	free(pipex->fd);
-	//}
-	//free(pipex->pid);
+	i = 0;
+	if (pipex->fd)
+	{
+		while (i < pipex->pipe_n)
+		{
+			free(pipex->fd[i]);
+			i++;
+		}
+		free(pipex->fd);
+	}
+	free(pipex->pid);
 }
 
 void	free_arr(char **array)
