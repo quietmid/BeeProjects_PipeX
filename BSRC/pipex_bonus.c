@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 17:49:08 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/15 14:37:29 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,6 @@ static int	waiting(t_pipex *pipex)
 		else if (WIFSIGNALED(status))
 			status = WTERMSIG(status);
 	}
-	//while (1)
-	//{
-	//	if (wait(&status) == -1 && errno == ECHILD)
-	//		break ;
-	//	if (WIFEXITED(status))
-	//		status = WEXITSTATUS(status);
-	//}
 	return (status);
 }
 
@@ -91,9 +84,7 @@ static void	pipes_creator(t_pipex *pipex)
 int	main(int ac, char **ag, char **envp)
 {
 	t_pipex	pipex;
-	int status;
 
-	status = 0;
 	if (ac < arg_count(ag[1], &pipex))
 		error_msg(ERR_INPUT, NULL);
 	if (pipex.here_doc == 1)
@@ -111,19 +102,5 @@ int	main(int ac, char **ag, char **envp)
 	if (pipex.here_doc == 1)
 		unlink(".here_doc_temp");
 	free_parent(&pipex);
-	//getchar();
-	return (status);
+	return (pipex.status);
 }
-
-/*
-	9.4 if unset the PATH and change permission file, my exit code is different. 
-	5.4 here_doc completed. no memory leak with system(). god bless me tomorrow that it will stay like this. Tasks for tomorrow. Fix normi error
-	
-	5.4 adding here_doc but it is not working properly. It exits right away. Maybe I should use Elias method, just write into the terminal instead of creating a temp file.
-	
-	4.4 got it to work by fixing the right number of pipes. hard coded for filein exit code since filein isn't in waitpid so the waiting function doesn't matter. 5.4 need to add here_doc and understand what here_doc means also need to test with more cmds #
-	3.4	using dprintf. Placed fork() at the wrong place, it was in the child process instead in the parent process. 
-	2.4 updated the pipe situation instead of trying to make it like fd[i][2], it will be single fd[i], with odd number being write and even number being read end. not sure where it is seg faulting. updated my makefile, so it compiles bonus now
-	
-	1.4 added the pipe closer function that closes all the pipe at the end. I should probably also use that in the child process. The wait function, I should see if I can just wait for any child process or just the last one.
-*/

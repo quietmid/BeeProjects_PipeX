@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 17:31:54 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 17:23:26 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/types.h>
-# include <errno.h>
 
 //error definition
 
@@ -40,8 +39,8 @@ typedef struct s_pipex
 	pid_t	*pid;
 	int		here_doc;
 	int		**fd;
-	int		cmd_n;
 	int		pid_n;
+	int		cmd_n;
 	int		pipe_n;
 	int		filein;
 	int		fileout;

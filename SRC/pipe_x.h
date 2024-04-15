@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/10 14:01:11 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/12 14:36:33 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ char	*find_path(char **envp);
 void	waiting(t_pipex *pipex);
 void	free_arr(char **array);
 void	free_parent(t_pipex *pipex);
-void	free_child(t_pipex *pipex);
 void	quotes_scan(char *str);
 
 //Processes

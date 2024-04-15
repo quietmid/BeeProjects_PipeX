@@ -6,13 +6,12 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:54 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/11 17:23:32 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/15 19:15:11 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe_x.h"
 
-//join the command with the path and use access to find the command
 static char	*exe_cmd(char *ag, char **path)
 {
 	char	*tmp;
@@ -52,7 +51,7 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 	pipex.cmd_a = ft_split(ag[2], 31);
 	if (pipex.cmd_a[0] == NULL)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
-	if (pipex.cmd_a[0][0] == '/')
+	if (pipex.cmd_a[0][0] == '/' || pipex.cmd_a[0][0] == '.')
 		pipex.cmd = pipex.cmd_a[0];
 	else
 		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
@@ -60,8 +59,9 @@ void	child_process1(char **ag, char **envp, t_pipex pipex)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
 	{
+		error_msg(ERR, pipex.cmd);
+		free_arr(pipex.path_cmds);
 		free_arr(pipex.cmd_a);
-		error_msg(ERR, NULL);
 	}
 }
 
@@ -77,7 +77,7 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 	pipex.cmd_a = ft_split(ag[3], 31);
 	if (pipex.cmd_a[0] == NULL)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
-	if (pipex.cmd_a[0][0] == '/')
+	if (pipex.cmd_a[0][0] == '/' || pipex.cmd_a[0][0] == '.')
 		pipex.cmd = pipex.cmd_a[0];
 	else
 		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
@@ -85,8 +85,9 @@ void	child_process2(char **ag, char **envp, t_pipex pipex)
 		error_msg(ERR_CMD, pipex.cmd_a[0]);
 	if (execve(pipex.cmd, pipex.cmd_a, envp) < 0)
 	{
+		error_msg(ERR, pipex.cmd);
+		free_arr(pipex.path_cmds);
 		free_arr(pipex.cmd_a);
-		error_msg(ERR, NULL);
 	}
 }
 
@@ -112,17 +113,5 @@ int	main(int ac, char **ag, char **envp)
 		child_process2(ag, envp, pipex);
 	waiting(&pipex);
 	free_arr(pipex.path_cmds);
-	//getchar();
 	return (pipex.status);
 }
-
-/*
-	9.4 if unset the PATH and change permission file, my exit code is different. 
-	27.3 updates: scan the agc first and replace sp(32) with 31 unless you encounter a ' or " then you ignore the space until another ' or " to close the argument. can't do "awk '{print "Hello"}'" as an argument. I get awk & {print Hello} instead of {print "Hello"}
-	
-	26.3 updates 2: fix the error code, its now giving the correct error code. The tester is still not passing. Especially if the commands itself has "" marks.
-	
-	26.3 updates: need to return the wexitstatus in waitpid to make sure that I return the right exit code. I am piping correctly and currently no memory leaks. 
-
-	22.3 updates: used tester failed a lot of cases on STDERR, im not exiting correctly or printing out the correct exit code. I also need to check for ag[1] permission, if it doesn't allow us, I need to return errors too, permission denied.
-*/

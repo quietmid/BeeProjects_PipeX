@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 18:09:36 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/15 17:33:34 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ static void	sub_dup2(int zero, int first)
 	dup2(first, 1);
 }
 
-static void	exe_support(const char *cmd, char **ag, char **envp, t_pipex *pipex)
+static void	exe_support(char *cmd, char **ag, char **envp, t_pipex *pipex)
 {
 	if (execve(cmd, ag, envp) < 0)
 	{
+		error_msg(ERR, cmd);
 		free_arr(ag);
 		free_parent(pipex);
-		error_msg(ERR, NULL);
 	}
 }
 
@@ -81,7 +81,7 @@ void	child_process(char **ag, char **envp, t_pipex pipex, int i)
 		sub_dup2(pipex.fd[i - 1][0], pipex.fd[i][1]);
 	pipe_closer(&pipex);
 	pipex.cmd_a = cmd_split(ag[2 + i + pipex.here_doc]);
-	if (pipex.cmd_a[0][0] == '/')
+	if (pipex.cmd_a[0][0] == '/' || pipex.cmd_a[0][0] == '.')
 		pipex.cmd = pipex.cmd_a[0];
 	else
 		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);

@@ -6,15 +6,11 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/10 16:43:52 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/15 18:47:18 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipe_x.h"
-
-// when the file can't be found
-// zsh: no such file or directiory: `input`
-// 0: stdinput 1: stdoutput 2:stderror 
 
 void	error_msg(char *err, char *ag)
 {
@@ -40,11 +36,12 @@ void	error_msg(char *err, char *ag)
 	exit (EXIT_FAILURE);
 }
 
-// go through the envp and search for PATH then get that string after the PATH 
 char	*find_path(char **envp)
 {
 	int	i;
 
+	if (!envp || !*envp)
+		*envp = "PATH=/bin:/usr/bin";
 	i = 0;
 	while (ft_strncmp("PATH", *envp, 4))
 	{
@@ -93,7 +90,8 @@ void	quotes_scan(char *str)
 	count = 0;
 	while (str[i])
 	{
-		if ((str[i] == ' ' || str[i] == '	') && (count == 0 || count == 2))
+		if ((str[i] == ' ' || str[i] == '\t' || str[i] == '\n') \
+		&& (count == 0 || count == 2))
 			str[i] = 31;
 		if (str[i] == c)
 		{

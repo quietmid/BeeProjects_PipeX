@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 17:13:04 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 18:10:56 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/15 19:13:14 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ char	*find_path(char **envp)
 {
 	int	i;
 
+	if (!envp || !*envp)
+		*envp = "PATH=/bin:/usr/bin";
 	i = 0;
 	while (ft_strncmp("PATH", *envp, 4))
 	{
