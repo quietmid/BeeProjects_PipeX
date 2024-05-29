@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:42 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 17:23:26 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/17 17:17:20 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define ERR_INPUT "trap card activated: not enough inputs"
 # define ERR_HD "here_doc"
 # define ERR_NO "No such file or directory"
+# define ERR_EXE "Permission denied"
+# define ERR_DIR "is a directory"
 # define ERR ""
 
 # define BUFF_SIZE 500
@@ -70,5 +72,6 @@ void	the_piper(t_pipex pipex, char **ag, char **envp);
 void	child_process(char **ag, char **envp, t_pipex pipex, int idx);
 void	get_filein(char **ag, t_pipex *pipex);
 void	get_fileout(char *ag, t_pipex *pipex);
-
+char	*exe_cmd(char *ag, char **path);
+char	*find_cmd(char **ag, char **path);
 #endif

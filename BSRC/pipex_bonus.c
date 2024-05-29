@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 13:52:18 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/15 14:37:29 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/19 13:03:13 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ int	main(int ac, char **ag, char **envp)
 	if (pipex.here_doc == 1)
 		unlink(".here_doc_temp");
 	free_parent(&pipex);
+	getchar();
 	return (pipex.status);
 }

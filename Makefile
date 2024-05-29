@@ -6,7 +6,7 @@
 #    By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/08 15:36:20 by jlu               #+#    #+#              #
-#    Updated: 2024/04/15 18:41:56 by jlu              ###   ########.fr        #
+#    Updated: 2024/04/18 17:44:25 by jlu              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,8 @@ $(NAME): $(LIBFT) $(OBJECTS)
 		@echo "$(CYAN)--------------------------------"
 		@echo "$(NAME) = Let's get piping!"
 		@echo "$(CYAN)--------------------------------$(RESET)"
+		@rm -f $(BOBJECTS)
+		@rm -f .bonus
 
 $(LIBFT):
 		@$(MAKE) -C ./libft

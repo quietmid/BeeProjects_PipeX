@@ -6,13 +6,13 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 15:31:43 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/15 17:33:34 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/17 17:30:00 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static char	*exe_cmd(char *ag, char **path)
+char	*exe_cmd(char *ag, char **path)
 {
 	char	*tmp;
 	char	*command;
@@ -56,6 +56,21 @@ static void	sub_dup2(int zero, int first)
 
 static void	exe_support(char *cmd, char **ag, char **envp, t_pipex *pipex)
 {
+	if (cmd[0] == '.')
+	{
+		if (access(cmd, X_OK) != 0)
+		{
+			error_msg(ERR_EXE, cmd);
+			free_arr(ag);
+			free_parent(pipex);
+		}
+		if (open(cmd, O_RDONLY | O_DIRECTORY) > 0)
+		{
+			error_msg(ERR_DIR, cmd);
+			free_arr(ag);
+			free_parent(pipex);
+		}
+	}
 	if (execve(cmd, ag, envp) < 0)
 	{
 		error_msg(ERR, cmd);
@@ -81,10 +96,7 @@ void	child_process(char **ag, char **envp, t_pipex pipex, int i)
 		sub_dup2(pipex.fd[i - 1][0], pipex.fd[i][1]);
 	pipe_closer(&pipex);
 	pipex.cmd_a = cmd_split(ag[2 + i + pipex.here_doc]);
-	if (pipex.cmd_a[0][0] == '/' || pipex.cmd_a[0][0] == '.')
-		pipex.cmd = pipex.cmd_a[0];
-	else
-		pipex.cmd = exe_cmd(pipex.cmd_a[0], pipex.path_cmds);
+	pipex.cmd = find_cmd(pipex.cmd_a, pipex.path_cmds);
 	if (!pipex.cmd && !pipex.path_cmds)
 		error_msg(ERR_NO, pipex.cmd_a[0]);
 	if (!pipex.cmd)

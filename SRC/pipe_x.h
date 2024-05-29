@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 17:17:49 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/12 14:36:33 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/16 16:09:20 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 //error definition
 # define ERR_INPUT "Cmon man, do you know how to count up to four?"
 # define ERR_CMD "command not found"
+# define ERR_EXE "Permission denied"
+# define ERR_DIR "is a directory"
 # define ERR ""
 
 typedef struct s_pipex

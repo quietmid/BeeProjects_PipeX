@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 16:41:07 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/15 14:53:25 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/17 17:30:26 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,18 @@ char	**cmd_split(char *str)
 	if (!result)
 		error_msg(ERR, NULL);
 	return (result);
+}
+
+char	*find_cmd(char **ag, char **path)
+{
+	char	*cmd;
+
+	cmd = NULL;
+	if (ag[0] == NULL)
+		error_msg(ERR_CMD, ag[0]);
+	if (ag[0][0] == '/' || ag[0][0] == '.')
+		cmd = ag[0];
+	else
+		cmd = exe_cmd(ag[0], path);
+	return (cmd);
 }

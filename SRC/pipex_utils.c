@@ -6,7 +6,7 @@
 /*   By: jlu <jlu@student.hive.fi>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 15:24:51 by jlu               #+#    #+#             */
-/*   Updated: 2024/04/15 18:47:18 by jlu              ###   ########.fr       */
+/*   Updated: 2024/04/17 16:27:41 by jlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ void	error_msg(char *err, char *ag)
 {
 	ft_putstr_fd("pipex: ", 2);
 	if (err == ERR_INPUT)
-	{
 		ft_putendl_fd(err, 2);
-		exit (EXIT_FAILURE);
-	}
 	if (err == ERR_CMD)
 	{
 		ft_putstr_fd(ag, 2);
@@ -27,12 +24,20 @@ void	error_msg(char *err, char *ag)
 		ft_putendl_fd(err, 2);
 		exit (127);
 	}
+	if (err == ERR_EXE || err == ERR_DIR)
+	{
+		ft_putstr_fd(ag, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(err, 2);
+		exit (126);
+	}
 	if (ag != NULL)
 	{
 		ft_putstr_fd(ag, 2);
 		ft_putstr_fd(": ", 2);
 	}
-	perror("");
+	if (err == ERR)
+		perror("");
 	exit (EXIT_FAILURE);
 }
 
